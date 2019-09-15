@@ -17,11 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_swagger.views import get_swagger_view
 
-swagger = get_swagger_view(title='EndMovie API')
+schema = get_swagger_view(title='EndMovie API')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', swagger),
+    path('api/', schema),
     path('accounts/', include('accounts.urls')),
     path('movies/', include('movies.urls')),
 ]

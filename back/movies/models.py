@@ -11,4 +11,23 @@ class Movie(models.Model):
     content = models.TextField()
     poster = models.TextField()
     back_image = models.TextField()
+    video = models.TextField()
     open_date = models.CharField(max_length=4, blank=True)
+
+class Comment(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.CharField(max_length=300)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+class Score(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    star = models.IntegerField(
+        validators = (
+            MaxValueValidator(5),
+            MinValueValidator(0)
+        )
+    )
+    create_at = models.DateTimeField(auto_now_add=True)
