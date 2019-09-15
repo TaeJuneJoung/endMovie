@@ -3,15 +3,17 @@ from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Genre(models.Model):
+    id = models.IntegerField(primary_key=True)
     genre_type = models.CharField(max_length=30)
 
 class Movie(models.Model):
+    id = models.IntegerField(primary_key=True)
     genre = models.ManyToManyField(Genre, related_name='movies', blank=True)
     title = models.CharField(max_length=150)
     content = models.TextField()
     poster = models.TextField()
     back_image = models.TextField()
-    video = models.TextField()
+    video = models.TextField(blank=True)
     open_date = models.CharField(max_length=4, blank=True)
 
 class Comment(models.Model):

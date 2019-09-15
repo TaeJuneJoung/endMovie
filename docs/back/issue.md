@@ -21,8 +21,6 @@ SECRET_KEY = secret_key.get('SECRET_KEY')
 
 ​	RestAPI 문서 swagger을 이용하려고 하는데 에러가 발생하였다. 기존에 사용하던 부분은 문제없이 되었는데 파이썬의 버전이 바뀌어서 이러한 일이 발생한 것인가...
 
-​	OpenAPI와 CoreAPI는 무엇인가?
-
 ```python
 #settings.py
 REST_FRAMEWORK = {
@@ -30,7 +28,7 @@ REST_FRAMEWORK = {
 }
 ```
 
-
+​	자동화 API문서를 만들어 주는 방법으로는 Swagger도 있지만, **drf-yasg** 라는 것도 있다.
 
 
 
@@ -41,3 +39,5 @@ REST_FRAMEWORK = {
 [2-1. Swagger](https://stackoverflow.com/questions/57123611/why-swagger-raises-unclear-error-django)
 
 [2-2. Swagger](https://www.django-rest-framework.org/community/3.10-announcement/)
+
+[2-3. 다양한 REST API 자동 문서화](https://medium.com/towncompany-engineering/친절하게-django-rest-framework-api-문서-자동화하기-drf-yasg-c835269714fc)

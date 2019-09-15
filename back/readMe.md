@@ -29,6 +29,14 @@ pip install django-imagekit
 
 
 
+## BeautifulSoup
+
+```bash
+pip install bs4
+```
+
+
+
 
 
 ### 참고자료
