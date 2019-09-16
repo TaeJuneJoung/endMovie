@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Genre, Movie, Comment, Score
+from accounts.serializers import UserSerializer
+
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,11 +15,13 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = ('id', 'genres', 'title', 'content', 'poster', 'back_image', 'video', 'open_date')
 
 class CommentSerializer(serializers.ModelSerializer):
+    users = UserSerializer(source='user', many=False)
     class Meta:
         model = Comment
-        fields = ('id', 'movie', 'user', 'content', 'create_at', 'update_at')
+        fields = ('id', 'movie', 'users', 'content', 'update_at', 'is_update')
 
 class ScoreSerializer(serializers.ModelSerializer):
+    users = UserSerializer(source='user', many=False)
     class Meta:
         model = Score
-        fields = ('id', 'movie', 'user', 'content', 'create_at', 'update_at')
+        fields = ('id', 'movie', 'users', 'star', 'create_at')

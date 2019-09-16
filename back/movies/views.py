@@ -37,11 +37,42 @@ def comments(request, movie_pk):
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
 
+@api_view(['GET', 'PUT', 'DELETE'])
+def comment(request, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if request.method == 'GET':
+        serializer = CommentSerializer(comment, many=False)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = CommentSerializer(comment, many=False, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        comment.delete()
+        return Response({'message':'삭제되었습니다.'})
+
 @api_view(['GET'])
 def scores(request, movie_pk):
     scores = Score.objects.filter(movie=movie_pk).all()
     serializer = ScoreSerializer(scores, many=True)
     return Response(serializer.data)
+
+@api_view(['PUT', 'DELETE'])
+def score(request, score_pk):
+    score = get_object_or_404(Score, pk=score_pk)
+    if request.method == 'PUT':
+        serializer = ScoreSerializer(score, many=False, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        score.delete()
+        return Response({'message':'삭제되었습니다.'})
 
 def movie_crawling(request):
     crawling.themovie_crawling()
