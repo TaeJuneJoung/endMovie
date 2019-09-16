@@ -5,6 +5,10 @@ import requests
 import datetime
 import os, json
 
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SECRET_DIR = os.path.join(BASE_DIR, 'secret_data')
+
 """
 themovie_crawling():
 input: None
@@ -14,10 +18,6 @@ the movie db api에서 제공하는 장르, 영화 정보를 가지고 온다.
 
 권한필요] 관리자
 """
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_DIR = os.path.join(BASE_DIR, 'secret_data')
-
 def themovie_crawling():
     lan = 'ko-KR'
     size_list = ['w500', 'original']
