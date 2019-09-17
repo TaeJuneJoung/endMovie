@@ -20,8 +20,8 @@ class Comment(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
-    create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
+    is_update = models.IntegerField(default=0)
 
 class Score(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
