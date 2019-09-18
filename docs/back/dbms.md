@@ -1,0 +1,12 @@
+# PostgresSQL
+
+```sql
+CREATE DATABASE 데이터베이스이름;
+CREATE USER 유저이름 WITH PASSWORD '비밀번호';
+
+ALTER ROLE 유저이름 SET CLIENT_ENCODING TO 'utf-8';
+ALTER ROLE 유저이름 SET TIMEZONE TO 'Asia/Seoul';
+
+GRANT ALL PRIVILEGES ON DATABASE 데이터베이스이름 TO 유저이름;
+```
+
