@@ -21,14 +21,12 @@ def themovie_crawling():
     lan = 'ko-KR'
     size_list = ['w500', 'original']
 
-    #THE MOVIE API TOKEN
     with open(os.path.join(SECRET_DIR, 'secret_key.json')) as f:
         data = f.read()
     secret_key = json.loads(data)
     THEMOVIEDB_API = secret_key.get('THEMOVIEDB_API')
     URL = 'https://api.themoviedb.org/3/'
 
-    #Genre
     GENRE_URL = f'{URL}genre/movie/list?api_key={THEMOVIEDB_API}&language={lan}'
     req = requests.get(GENRE_URL)
     if req.status_code == 200:
@@ -38,11 +36,10 @@ def themovie_crawling():
             genre_type = genre.get('name')
             Genre.objects.get_or_create(id=id, genre_type=genre_type)
 
-    #Movie
     POSTER_URL = f'https://image.tmdb.org/t/p/'
     MOVIE_URL = f'{URL}discover/movie?api_key={THEMOVIEDB_API}&language={lan}&sort_by=popularity.desc'
 
-    for page in range(1, 6): #초기 100개[6], 완성 후 1,000~3,000개[61~181]
+    for page in range(1, 6):
         DISCOVER_URL = MOVIE_URL + f'&page={page}'
         req = requests.get(DISCOVER_URL)
         if req.status_code == 200:

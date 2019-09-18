@@ -32,6 +32,22 @@ REST_FRAMEWORK = {
 
 
 
+## 3. RESTFUL POST USER
+
+​	RESTAPI에서 `POST`를 이용하여 user를 생성하려고 하는데 password가 평문으로 들어가는 문제가 발생하였다. SHA256을 이용해서 만든 후 다시 해결해나볼까 고민하다가 복잡하게 이렇게 풀거 같진 않아 검색하여 찾아보았다. 하다가 많은 오류를 만나면서 이렇게 해야겠다하며 짠 소스가 아래와 같다. 정확히 이게 맞는지 재확인은 필요!
+
+```python
+#request.method POST 일부
+serializer = UserPostSerializer(data=request.data)
+if serializer.is_valid():
+    user = get_user_model().objects.create_user(**serializer.data)
+    return Response({'message':'생성되었습니다.'})
+```
+
+
+
+
+
 ### 참고자료
 
 [1. Key값 숨기기](https://blog.isaccchoi.com/programing/Django-secretkey-%EC%88%A8%EA%B8%B0%EA%B8%B0/)
@@ -41,3 +57,5 @@ REST_FRAMEWORK = {
 [2-2. Swagger](https://www.django-rest-framework.org/community/3.10-announcement/)
 
 [2-3. 다양한 REST API 자동 문서화](https://medium.com/towncompany-engineering/친절하게-django-rest-framework-api-문서-자동화하기-drf-yasg-c835269714fc)
+
+[3. RESTFUL POST USER](https://stackoverflow.com/questions/16857450/how-to-register-users-in-django-rest-framework)
