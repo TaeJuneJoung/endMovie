@@ -37,6 +37,12 @@ pip install bs4
 
 
 
+## CORS
+
+```bash
+pip install django-cors-headers
+```
+
 
 
 ### 참고자료
