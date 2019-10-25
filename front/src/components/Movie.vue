@@ -1,48 +1,109 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-card class="mx-auto grey darken-4" :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }" max-width="600">
-      <v-img :src="movie.poster" max-height="300px">
+    <v-card :class="`${{ 'on-hover': hover }} mx-auto grey darken-4`" :elevation="hover ? 12 : 2">
+      <v-img :src="movie.poster" class="movie-poster">
         <v-expand-transition>
-          <v-flex
-            v-if="hover"
-            class="transition-fast-in-fast-out transition-card v-card--reveal white--text"
-          >
-            ★★★★★
+          <v-flex v-if="hover" class="transition-card white--text">
+            <v-flex class="transition-card-title white--text title-shortly">{{ movie.title }}</v-flex>
+            <v-flex class="transition-card-content" v-if="auth">
+              <v-flex @click="createScore(movie.id, movie.score, movie.scoreId)">
+              <v-rating
+                v-model="rating"
+                :value="movie.score"
+                background-color="white"
+                color="yellow accent-4"
+                dense
+                half-increments
+                hover
+                size="18"
+              >
+              </v-rating>
+              </v-flex>
+              <v-flex class="transition-card-favorite mt-5"><v-icon class="white--text">mdi-heart</v-icon></v-flex>
+            </v-flex>
           </v-flex>
         </v-expand-transition>
       </v-img>
-
-      <v-container>
-        <v-flex class="title-shortly white--text">{{ movie.title }}</v-flex>
-        <v-flex class="grey--text caption">Date:</v-flex>
-        <v-flex class="grey--text caption">Action:</v-flex>
-        <v-flex class="grey--text caption">Member:</v-flex>
-      </v-container>
     </v-card>
   </v-hover>
 </template>
 
 
 <script>
+import { postMovieScore, putMovieScore } from '../api/index.js'
+
 export default {
-	props: {
+  props: {
     movie: {}
   },
-}
+  data() {
+    return {
+      auth: 'admin',
+      authId: 1,
+      rating: this.movie.score
+    };
+  },
+  methods: {
+    /** createScore
+     * param: 영화id, 현 사용자 평점, 평점id 
+     */
+    createScore(movieId, movieScore, movieScoreId) {
+      if(movieScoreId) {
+        putMovieScore(movieScoreId, this.authId, movieId, this.rating)
+          .then(({data}) => {
+            console.log(data)
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      } else {
+        postMovieScore(this.authId, movieId, this.rating)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.error(error)
+          })
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
 .title-shortly {
-	font-weight: bold;
-	text-overflow: ellipsis;
+  font-weight: bold;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
+.movie-poster {
+  height: 100%;
+  max-height: 400px;
+  min-height: 400px;
+}
 .transition-card {
-	background-color: rgba(0, 0, 0, 0.4);
-	height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  height: 100%;
+}
+.transition-card-title {
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	top: 20%;
+  position: relative;
+}
+.transition-card-content {
+  text-align: center;
+  top: 45%;
+  position: relative;
+}
+.transition-card-favorite {
+	text-align: center;
+	top: 55%;
+  position: relative;
 }
 </style>>
