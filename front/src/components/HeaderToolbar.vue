@@ -2,7 +2,7 @@
   <v-app-bar :class="`${toolbarColor} toolbar-px`" dark dense app>
 		<v-toolbar-title class="white--text">EndMovie</v-toolbar-title>
 		<v-spacer></v-spacer>
-		<v-btn text>Login</v-btn>
+		<v-btn text>로그인</v-btn>
   </v-app-bar>
 </template>
 
