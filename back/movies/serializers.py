@@ -21,7 +21,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'movie', 'users', 'content', 'update_at', 'is_update')
 
 class ScoreSerializer(serializers.ModelSerializer):
-    users = UserSerializer(source='user', many=False)
     class Meta:
         model = Score
-        fields = ('id', 'movie', 'users', 'star', 'create_at')
+        fields = ('id', 'star', 'movie', 'user', 'create_at')

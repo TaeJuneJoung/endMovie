@@ -26,7 +26,7 @@ class Comment(models.Model):
 class Score(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    star = models.IntegerField(
+    star = models.FloatField(
         validators = (
             MaxValueValidator(5),
             MinValueValidator(0)
