@@ -22,8 +22,8 @@ def users(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PUT', 'DELETE'])
-def user(request, user_pk):
-    user = get_object_or_404(User, pk=user_pk)
+def user(request, username):
+    user = get_object_or_404(User, username=username)
     if request.method == 'GET':
         serializer = UserSerializer(user, many=False)
         return Response(serializer.data)
