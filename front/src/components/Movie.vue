@@ -5,7 +5,7 @@
         <v-expand-transition>
           <v-flex v-if="hover" class="transition-card white--text">
             <v-flex class="transition-card-title white--text title-shortly">{{ movie.title }}</v-flex>
-            <v-flex class="transition-card-content" v-if="auth">
+            <v-flex class="transition-card-content" v-if="fetchedUser">
               <v-flex @click="createScore(movie.id, movie.score, movie.scoreId)">
               <v-rating
                 v-model="rating"
@@ -30,6 +30,7 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
 import { postMovieScore, putMovieScore } from '../api/index.js'
 
 export default {
@@ -38,10 +39,12 @@ export default {
   },
   data() {
     return {
-      auth: 'admin',
-      authId: 1,
+      user: this.fetchedUser,
       rating: this.movie.score
     };
+  },
+  computed: {
+    ...mapGetters(['fetchedUser']),
   },
   methods: {
     /** createScore
@@ -49,7 +52,7 @@ export default {
      */
     createScore(movieId, movieScore, movieScoreId) {
       if(movieScoreId) {
-        putMovieScore(movieScoreId, this.authId, movieId, this.rating)
+        putMovieScore(movieScoreId, this.user.id, movieId, this.rating)
           .then(({data}) => {
             console.log(data)
           })
@@ -57,7 +60,7 @@ export default {
             console.error(error)
           })
       } else {
-        postMovieScore(this.authId, movieId, this.rating)
+        postMovieScore(this.user.id, movieId, this.rating)
           .then(response => {
             console.log(response)
           })

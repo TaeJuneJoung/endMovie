@@ -6,6 +6,16 @@ from rest_framework import status
 from .models import User
 from .serializers import UserSerializer, UserPostSerializer
 
+@api_view(['POST'])
+def login(request):
+    if request.method == 'POST':
+        username = request.data.get('username')
+        user = get_object_or_404(User, username=username)
+        serializer = UserSerializer(user, many=False, data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
 def users(request):

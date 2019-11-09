@@ -10,7 +10,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { fetchMovieScore } from '../api/index.js'
 import Movie from '../components/Movie.vue'
 
 export default {
@@ -21,6 +20,7 @@ export default {
     this.$store.dispatch('FetchMovies')
   },
   computed: {
+    ...mapGetters(['fetchedUser']),
     ...mapGetters(['fetchedMovieList'])
   },
   methods: {
