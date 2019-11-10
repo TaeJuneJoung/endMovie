@@ -1,24 +1,20 @@
 <template>
-	<v-container class="h-100">
+  <v-container class="h-100">
     <v-row class="h-100 title-top-margin mt-sm-10" justify="center">
       <v-form ref="loginForm" v-model="valid" class="w-100">
         <v-col cols="12" sm="12" xs="12" class="text-center display-1">End Movie</v-col>
         <v-col cols="12" lg="5" sm="7" xs="10" class="mx-auto">
-          <v-flex class="font-weight-bold ml-1">
-						아이디
-					</v-flex>
-					<v-text-field
+          <v-flex class="font-weight-bold ml-1">아이디</v-flex>
+          <v-text-field
             v-model="username"
             type="text"
             label="아이디"
             :rules="[rules.isNull('아이디')]"
             solo
             required
-            @keyup.enter="loginValidate"
+            @keyup.enter="joinValidate"
           ></v-text-field>
-          <v-flex class="font-weight-bold ml-1">
-						비밀번호
-					</v-flex>
+          <v-flex class="font-weight-bold ml-1">비밀번호</v-flex>
           <v-text-field
             v-model="password"
             type="password"
@@ -26,11 +22,10 @@
             :rules="[rules.isNull('비밀번호')]"
             solo
             required
-            @keyup.enter="loginValidate"
+            autocomplete="on"
+            @keyup.enter="joinValidate"
           ></v-text-field>
-          <v-flex class="font-weight-bold ml-1">
-						비밀번호 재확인
-					</v-flex>
+          <v-flex class="font-weight-bold ml-1">비밀번호 재확인</v-flex>
           <v-text-field
             v-model="passwordConfirm"
             type="password"
@@ -38,32 +33,55 @@
             :rules="[rules.isNull('비밀번호')]"
             solo
             required
-            @keyup.enter="loginValidate"
+            autocomplete="on"
+            @keyup.enter="joinValidate"
           ></v-text-field>
           <v-flex class="ml-1">
-						<span class="font-weight-bold">본인 확인 이메일</span>
-						<small class="grey--text">(선택)</small>
-					</v-flex>
-          <v-text-field
-            v-model="passwordConfirm"
-            type="password"
-            label="비밀번호 재확인"
-            :rules="[rules.isNull('비밀번호')]"
-            solo
-            required
-            @keyup.enter="loginValidate"
-          ></v-text-field>
+            <span class="font-weight-bold">본인 확인 이메일</span>
+          </v-flex>
+          <v-row>
+            <v-col cols="8">
+              <v-text-field
+                v-model="email"
+                type="email"
+                label="이메일"
+                :rules="[rules.email]"
+                solo
+                required
+                @keyup.enter="emailValidate"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-btn
+                large
+                tile
+                :loading="isLoading"
+                :disabled="isLoading"
+                class="w-100 success"
+                @click="emailValidate"
+              >인증받기</v-btn>
+            </v-col>
+          </v-row>
+          <v-text-field v-model="authNum" :disabled="!isStop" label="인증번호" solo required>
+            <template v-slot:append v-if="isStop">
+              <span>
+                <span class="error--text" v-if="notMeching == true">
+                  불일치
+                  <v-icon class="error--text">mdi-close</v-icon>
+                </span>
+                <span class="cursor" @click="checkAuthNums">인증</span>
+              </span>
+            </template>
+          </v-text-field>
         </v-col>
 
         <v-col cols="12" lg="5" sm="7" xs="10" class="mx-auto my-auto">
-          <v-btn class="w-100 title" large color="success" @click="loginValidate">로그인</v-btn>
+          <v-btn class="w-100 title" tile large color="success" @click="joinValidate">회원가입</v-btn>
         </v-col>
         <v-col cols="12" lg="5" sm="7" xs="10" class="mx-auto my-auto">
           <v-divider class="mb-3"></v-divider>
           <v-row justify="center">
-            <v-btn text tile small class="border-right-line">아이디 찾기</v-btn>
-            <v-btn text tile small>비밀번호 찾기</v-btn>
-            <v-btn text tile small class="border-left-line">회원가입</v-btn>
+            <v-btn text tile small>이용약관</v-btn>
           </v-row>
         </v-col>
       </v-form>
@@ -72,25 +90,72 @@
 </template>
 
 <script>
+import { emailCheck, joinUser } from "../api/user.js";
+
 export default {
   data() {
     return {
       valid: false,
       username: "",
-			password: "",
-			passwordConfirm: '',
-			email: '',
+      password: "",
+      passwordConfirm: "",
+      email: "",
+      checkedEmail: "",
+      isCheckEmail: false,
+      isLoading: false,
+      authNum: "",
+      emailCheckValue: "",
+      notMeching: false,
+      isStop: false,
       rules: {
-        isNull: str => v => (v || "").length > 0 || `${str}를 입력해주세요.`
+        isNull: str => v => (v || "").length > 0 || `${str}를 입력해주세요.`,
+        email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.'
       }
     };
   },
   methods: {
-    loginValidate() {
+    joinValidate() {
       if (this.$refs.loginForm.validate()) {
-				const loginData = {username: this.username, password: this.password}
-				this.$store.dispatch('login', loginData)
-				this.$router.push('/')
+        if (this.isCheckEmail) {
+          const joinData = { username: this.username, password: this.password, email: this.checkedEmail }
+          joinUser(joinData)
+            .then(({data}) => {
+              console.log(data)
+              this.$router.push("/")
+            })
+            .catch(error => {
+              console.error(error)
+            })
+        } else {
+          alert('이메일 인증이 필요합니다.')
+        }
+      }
+    },
+    emailValidate() {
+      this.isLoading = true
+      emailCheck(this.email)
+        .then(({ data }) => {
+          if(data.result) {
+            this.checkedEmail = this.email
+            this.emailCheckValue = data.result
+            this.isLoading = false
+            this.isStop = true
+          } else {
+            this.isLoading = false
+            alert('지원하지 않는 이메일입니다.')
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    checkAuthNums() {
+      if(this.authNum == this.emailCheckValue) {
+        this.isStop = false
+        this.isCheckEmail = true
+        alert('인증이 완료되었습니다.')
+      } else {
+        this.notMeching = true
       }
     }
   }
@@ -105,8 +170,16 @@ export default {
   border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
 @media (max-width: 600px) {
-	.title-top-margin {
-		margin-top: 50px;
-	}
+  .title-top-margin {
+    margin-top: 50px;
+  }
+}
+.col {
+  padding: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.cursor {
+  cursor: pointer;
 }
 </style>

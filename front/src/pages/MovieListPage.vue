@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col v-for="movie in fetchedMovieList" :key="movie.id" cols="12" lg="3" sm="4" xs="12">
-        <movie :movie="movie" @click="test"></movie>
+        <movie :movie="movie"></movie>
       </v-col>
     </v-row>
   </v-container>
@@ -16,17 +16,21 @@ export default {
   components: {
     Movie
   },
+  data() {
+    return {
+      user: this.fetchedUser
+    }
+  },
   created() {
-    this.$store.dispatch('FetchMovies')
+    this.$store.dispatch('FetchMovies', this.user)
   },
   computed: {
     ...mapGetters(['fetchedUser']),
     ...mapGetters(['fetchedMovieList'])
   },
+  mounted() {
+  },
   methods: {
-    test: (e) => {
-      console.log(e)
-    }
   }
 }
 </script>
