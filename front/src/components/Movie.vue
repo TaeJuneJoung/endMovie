@@ -39,7 +39,6 @@ export default {
   },
   data() {
     return {
-      user: this.fetchedUser,
       rating: this.movie.score
     };
   },
@@ -52,7 +51,7 @@ export default {
      */
     createScore(movieId, movieScore, movieScoreId) {
       if(movieScoreId) {
-        putMovieScore(movieScoreId, this.user.id, movieId, this.rating)
+        putMovieScore(movieScoreId, this.fetchedUser.id, movieId, this.rating)
           .then(({data}) => {
             console.log(data)
           })
@@ -60,7 +59,7 @@ export default {
             console.error(error)
           })
       } else {
-        postMovieScore(this.user.id, movieId, this.rating)
+        postMovieScore(this.fetchedUser.id, movieId, this.rating)
           .then(response => {
             console.log(response)
           })
