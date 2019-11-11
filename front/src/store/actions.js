@@ -2,8 +2,19 @@ import { fetchMovieList, fetchMovieScore } from '../api/index.js'
 import { loginUser } from '../api/user.js'
 
 export default {
+	login({commit}, user) {
+		loginUser(user)
+			.then(({data}) => {
+				commit('setUser', data)
+			})
+			.catch(error => {
+				console.error(error)
+			})
+	},
+	logout({commit}) {
+		commit('setUser', '')
+	},
 	FetchMovies({commit}, username) {
-		console.log(username)
 		fetchMovieList()
 			.then(({data}) => {
 				if (username) {
@@ -34,16 +45,4 @@ export default {
 				console.error(error)
 			})
 	},
-	login({commit}, user) {
-		loginUser(user)
-			.then(({data}) => {
-				commit('setUser', data)
-			})
-			.catch(error => {
-				console.error(error)
-			})
-	},
-	logout({commit}) {
-		commit('setUser', '')
-	}
 }

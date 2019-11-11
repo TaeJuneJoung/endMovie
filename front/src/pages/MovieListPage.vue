@@ -22,16 +22,12 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('FetchMovies', this.user)
+    this.$store.dispatch('FetchMovies', this.fetchedUser.username)
   },
   computed: {
     ...mapGetters(['fetchedUser']),
     ...mapGetters(['fetchedMovieList'])
   },
-  mounted() {
-  },
-  methods: {
-  }
 }
 </script>
 

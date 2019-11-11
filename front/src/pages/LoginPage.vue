@@ -58,7 +58,12 @@ export default {
       if (this.$refs.loginForm.validate()) {
 				const loginData = {username: this.username, password: this.password}
         this.$store.dispatch('login', loginData)
-        this.$router.push('/')
+          .then(response => {
+            this.$store.dispatch('FetchMovies', this.username)
+            setTimeout(() => {
+              this.$router.push('/')
+            }, 500)
+          })
       }
     },
     join() {
