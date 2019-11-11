@@ -17,3 +17,8 @@ class User(AbstractUser):
         options = {'quality':90},
         blank=True
     )
+
+class AuthEmail(models.Model):
+    email = models.TextField()
+    authentication = models.TextField()
+    

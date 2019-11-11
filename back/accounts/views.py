@@ -3,8 +3,24 @@ from django.contrib.auth import get_user_model
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import User
-from .serializers import UserSerializer, UserPostSerializer
+from .models import User, AuthEmail
+from .serializers import UserSerializer, UserPostSerializer, EmailCheckSerializer
+from .authentication import auth_email_check
+
+@api_view(['GET', 'PUT'])
+def email_check(request, email):
+    if request.method == 'GET':
+        try:
+            auth_nums = auth_email_check(email)
+            auth_email = AuthEmail.objects.get_or_create(email=email)
+            auth_email[0].authentication=auth_nums
+            auth_email[0].save()
+        except:
+            auth_nums = False
+        finally:
+            return Response({'result': auth_nums})
+    else:
+        pass
 
 @api_view(['POST'])
 def login(request):

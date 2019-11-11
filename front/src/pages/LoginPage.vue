@@ -20,6 +20,7 @@
             :rules="[rules.isNull('비밀번호')]"
             solo
             required
+            autocomplete="on"
             @keyup.enter="loginValidate"
           ></v-text-field>
         </v-col>
@@ -32,7 +33,7 @@
           <v-row justify="center">
             <v-btn text tile small class="border-right-line">아이디 찾기</v-btn>
             <v-btn text tile small>비밀번호 찾기</v-btn>
-            <v-btn text tile small class="border-left-line">회원가입</v-btn>
+            <v-btn text tile small class="border-left-line" @click="join">회원가입</v-btn>
           </v-row>
         </v-col>
       </v-form>
@@ -56,9 +57,12 @@ export default {
     loginValidate() {
       if (this.$refs.loginForm.validate()) {
 				const loginData = {username: this.username, password: this.password}
-				this.$store.dispatch('login', loginData)
-				this.$router.push('/')
+        this.$store.dispatch('login', loginData)
+        this.$router.push('/')
       }
+    },
+    join() {
+      this.$router.push('/join')
     }
   }
 };

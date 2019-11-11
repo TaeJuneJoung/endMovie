@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, AuthEmail
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -19,3 +19,8 @@ class UserPostSerializer(serializers.ModelSerializer):
             'id', 'last_login', 'username', 'first_name', 'last_name',
             'email', 'profile_image', 'password'
         ]
+
+class EmailCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AuthEmail
+        fields = ['email']

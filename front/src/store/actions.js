@@ -2,10 +2,10 @@ import { fetchMovieList, fetchMovieScore } from '../api/index.js'
 import { loginUser } from '../api/user.js'
 
 export default {
-	FetchMovies({commit}) {
+	FetchMovies({commit}, username) {
+		console.log(username)
 		fetchMovieList()
 			.then(({data}) => {
-				let username = 'admin'
 				if (username) {
 					let movies = data
 					fetchMovieScore(username)

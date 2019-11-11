@@ -13,6 +13,21 @@ function loginUser(user) {
 	return axios.post(`${config.baseUrl}login`, user)
 }
 
+/**
+ * 이메일 인증
+ * emailCheck
+ * @param {*} email 
+ */
+function emailCheck(email) {
+	return axios.get(`${config.baseUrl}emailcheck/${email}`)
+}
+
+function joinUser(user) {
+	return axios.post(`${config.baseUrl}users`, user)
+}
+
 export {
-	loginUser
+	loginUser,
+	emailCheck,
+	joinUser,
 }
