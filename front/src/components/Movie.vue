@@ -3,7 +3,7 @@
     <v-card :class="`${{ 'on-hover': hover }} mx-auto grey darken-4`" :elevation="hover ? 12 : 2">
       <v-img :src="movie.poster" class="movie-poster">
         <v-expand-transition>
-          <v-flex v-if="hover" class="transition-card white--text">
+          <v-flex v-if="hover" class="transition-card white--text" @click.self="detail(movie.id)">
             <v-flex class="transition-card-title white--text title-shortly">{{ movie.title }}</v-flex>
             <v-flex class="transition-card-content" v-if="fetchedUser">
               <v-flex @click="createScore(movie.id, movie.score, movie.scoreId)">
@@ -51,22 +51,29 @@ export default {
      */
     createScore(movieId, movieScore, movieScoreId) {
       if(movieScoreId) {
+        /** putMovieScore
+         * param: 영화평점id, 사용자id, 영화id, 평점
+         */
         putMovieScore(movieScoreId, this.fetchedUser.id, movieId, this.rating)
           .then(({data}) => {
-            console.log(data)
           })
           .catch(error => {
             console.error(error)
           })
       } else {
+        /** postMovieScore
+         * param: 사용자id, 영화id, 평점
+         */
         postMovieScore(this.fetchedUser.id, movieId, this.rating)
           .then(response => {
-            console.log(response)
           })
           .catch(error => {
             console.error(error)
           })
       }
+    },
+    detail(movieId) {
+      this.$router.push(`/movies/${movieId}`)
     }
   }
 };
@@ -108,4 +115,4 @@ export default {
 	top: 55%;
   position: relative;
 }
-</style>>
+</style>

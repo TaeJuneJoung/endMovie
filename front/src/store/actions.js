@@ -1,4 +1,4 @@
-import { fetchMovieList, fetchMovieScore } from '../api/index.js'
+import { fetchMovieList, fetchMovieScore, fetchMovie } from '../api/index.js'
 import { loginUser } from '../api/user.js'
 
 export default {
@@ -45,4 +45,13 @@ export default {
 				console.error(error)
 			})
 	},
+	FetchMovie({commit}, movieId) {
+		fetchMovie(movieId)
+			.then(({data}) => {
+				commit('setMovie', data)
+			})
+			.catch(error => {
+				console.error(error)
+			})
+	}
 }
