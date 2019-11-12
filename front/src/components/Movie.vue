@@ -73,7 +73,10 @@ export default {
       }
     },
     detail(movieId) {
-      this.$router.push(`/movies/${movieId}`)
+      this.$store.dispatch('FetchMovie', movieId)
+        .then(() => {
+          this.$router.push(`/movies/${movieId}`)
+        })
     }
   }
 };

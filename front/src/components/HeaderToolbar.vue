@@ -1,6 +1,8 @@
 <template>
   <v-app-bar :class="`${toolbarColor} toolbar-px`" dark dense app>
-		<v-toolbar-title class="white--text">EndMovie</v-toolbar-title>
+		<v-toolbar-title>
+			<router-link to="/" class="white--text">EndMovie</router-link>
+		</v-toolbar-title>
 		<v-spacer></v-spacer>
 		<v-btn text @click="logout" v-if="fetchedUser">로그아웃</v-btn>
 		<template v-else>
@@ -58,7 +60,10 @@ export default {
 }
 @media screen and (min-width: 768px) {
 	.toolbar-px {
-		padding: 0 150px 0 150px;
+		padding: 0 75px 0 75px;
 	}
+}
+a {
+	text-decoration: none;
 }
 </style>
