@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MovieListPage from '../pages/MovieListPage.vue'
+import MovieDetailPage from '../pages/MovieDetailPage.vue'
 import LoginPage from '../pages/LoginPage.vue'
 import JoinPage from '../pages/JoinPage.vue'
 
@@ -16,6 +17,10 @@ export const router = new VueRouter ({
 		{
 			path: '/movies',
 			component: MovieListPage
+		},
+		{
+			path: '/movies/:id',
+			component: MovieDetailPage
 		},
 		{
 			path: '/login',
