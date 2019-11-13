@@ -63,6 +63,11 @@ export default {
 		padding: 0 75px 0 75px;
 	}
 }
+@media screen and (min-width: 1024px) and (max-width: 1440px) {
+	.toolbar-px {
+		padding: 0 120px 0 120px;
+	}
+}
 a {
 	text-decoration: none;
 }

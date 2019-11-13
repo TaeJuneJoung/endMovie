@@ -27,3 +27,7 @@
 ## Movies
 
 1. Detail 페이지
+  - Comment
+  > DB: 좋아요 -> ManyToMany로 변경
+  > Report기능은 고려해볼 것
+  

@@ -7,5 +7,8 @@ export default {
 	},
 	fetchedUser(state) {
 		return state.user
+	},
+	fetchedComments(state) {
+		return state.comments
 	}
 }

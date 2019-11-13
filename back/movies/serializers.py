@@ -15,10 +15,10 @@ class MovieSerializer(serializers.ModelSerializer):
         fields = ('id', 'genres', 'title', 'content', 'poster', 'back_image', 'video', 'open_date')
 
 class CommentSerializer(serializers.ModelSerializer):
-    users = UserSerializer(source='user', many=False)
+    users = UserSerializer(source='user', many=False, read_only=True)
     class Meta:
         model = Comment
-        fields = ('id', 'movie', 'users', 'content', 'update_at', 'is_update')
+        fields = '__all__'
 
 class ScoreSerializer(serializers.ModelSerializer):
     class Meta:

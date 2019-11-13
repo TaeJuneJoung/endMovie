@@ -17,9 +17,16 @@ class Movie(models.Model):
     open_date = models.CharField(max_length=4, blank=True)
 
 class Comment(models.Model):
+    REPORT_STATUS = (
+        (0, 'FINE'),
+        (1, 'REPORT'),
+        (2, 'BLOCK')
+    )
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
+    good_count = models.IntegerField(default=0)
+    isReport = models.IntegerField(default=0, choices=REPORT_STATUS)
     update_at = models.DateTimeField(auto_now=True)
     is_update = models.IntegerField(default=0)
 

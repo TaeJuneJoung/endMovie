@@ -7,5 +7,8 @@ export default {
 	},
 	setUser(state, user) {
 		state.user = user
+	},
+	setComments(state, comments) {
+		state.comments = comments
 	}
 }
