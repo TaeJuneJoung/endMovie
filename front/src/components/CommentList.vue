@@ -11,11 +11,11 @@
 		<v-col cols="12" class="mb-3">
 			<small>{{ comment.update_at }}  | </small>
 			<small class="error--text"><v-icon small color="error">mdi-alarm-light</v-icon>신고</small>
-			<v-btn text small class="comment-good" @click="commentGood(comment.good_count)">
+			<v-btn text small class="comment-good" @click="commentGood(comment.goods)">
 				<v-icon small>
 					mdi-thumb-up-outline
 				</v-icon>
-				{{ comment.good_count }}
+				{{ comment.goods.length }}
 			</v-btn>
 		</v-col>
 		<v-divider class="my-3"></v-divider>

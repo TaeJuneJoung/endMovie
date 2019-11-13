@@ -51,7 +51,7 @@ def comments(request, movie_pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def comment(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == 'GET':
@@ -64,6 +64,14 @@ def comment(request, comment_pk):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PATCH':
+        user_pk = request.data.get('userId')
+        user =  get_object_or_404(get_user_model(), pk=user_pk)
+        if user in comment.goods.all():
+            comment.goods.remove(user)
+        else:
+            comment.goods.add(user)
+        return Response({'message':'수정되었습니다.'})
     else:
         comment.delete()
         return Response({'message':'삭제되었습니다.'})
