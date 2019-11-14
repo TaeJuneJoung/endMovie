@@ -16,20 +16,7 @@
         <v-img :src="fetchedMovie.back_image"></v-img>
       </v-col>
       <v-row class="mt-3">
-        <v-col cols="12" sm="6">
-          <iframe
-            id="player"
-            type="text/html"
-						class="movie-video"
-            :src="`http://www.youtube.com/embed/${fetchedMovie.video}`"
-            allowfullscreen="allowfullscreen"
-            mozallowfullscreen="mozallowfullscreen"
-            msallowfullscreen="msallowfullscreen"
-            oallowfullscreen="oallowfullscreen"
-            webkitallowfullscreen="webkitallowfullscreen"
-            frameborder="0"
-          ></iframe>
-        </v-col>
+        <youtube-video :video="fetchedMovie.video"></youtube-video>
         <v-col cols="12" sm="6">
           <v-flex class="content-line">내용</v-flex>
           {{ fetchedMovie.content }}
@@ -42,12 +29,14 @@
 </template>
 
 <script>
+import YoutubeVideo from '../components/YoutubeVideo.vue'
 import CommentList from '../components/CommentList.vue'
 import Comment from '../components/Comment.vue'
 import { mapGetters } from "vuex"
 
 export default {
 	components: {
+    YoutubeVideo,
     CommentList,
     Comment,
 	},
@@ -77,9 +66,5 @@ export default {
 }
 .open-date {
   padding-left: 5px;
-}
-.movie-video {
-	height: 360px;
-	width: 100%;
 }
 </style>
