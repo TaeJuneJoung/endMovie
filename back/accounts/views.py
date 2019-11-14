@@ -23,6 +23,18 @@ def email_check(request, email):
         pass
 
 @api_view(['POST'])
+def id_check(request):
+    if request.method == 'POST':
+        username = request.data.get('username')
+        try:
+            user = get_object_or_404(User, username=username)
+            result = True
+        except:
+            result = False
+        finally:
+            return Response({'result': result})
+
+@api_view(['POST'])
 def login(request):
     if request.method == 'POST':
         username = request.data.get('username')

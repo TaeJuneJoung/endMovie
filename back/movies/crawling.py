@@ -61,9 +61,16 @@ def themovie_crawling():
                     keys = req.json().get('results')
                     video = keys[0].get('key') if keys else ""
                 
-                movie = Movie.objects.get_or_create(id=id, title=title, poster=poster, back_image=back_image, content=content, open_date=open_date, video=video)
-                
+                movie = Movie.objects.get_or_create(id=id)
                 if movie[1]:
+                    movie[0].title = title
+                    movie[0].poster = poster
+                    movie[0].back_image = back_image
+                    movie[0].content = content
+                    movie[0].open_date = open_date
+                    movie[0].video = video
+                    movie[0].save()
+                
                     for gen in genres:
                         genre = get_object_or_404(Genre, id=gen)
                         movie[0].genre.add(genre)

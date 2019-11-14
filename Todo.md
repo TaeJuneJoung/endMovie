@@ -4,10 +4,6 @@
 
 1. **회원가입**
 
-   - 아이디 중복확인
-
-   - 비밀번호 / 비밀번호 확인 -> 체크
-
    - email
 
      > Django 기본 설정 email 중복 허용이므로,
@@ -28,6 +24,5 @@
 
 1. Detail 페이지
   - Comment
-  > DB: 좋아요 -> ManyToMany로 변경
   > Report기능은 고려해볼 것
   

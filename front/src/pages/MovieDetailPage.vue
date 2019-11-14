@@ -36,7 +36,7 @@
         </v-col>
       </v-row>
       <comment class="mt-5" :movieId="fetchedMovie.id"></comment>
-			<comment-list class="mt-3"></comment-list>
+			<comment-list class="mt-3" :movieId="fetchedMovie.id"></comment-list>
     </v-row>
   </v-container>
 </template>
