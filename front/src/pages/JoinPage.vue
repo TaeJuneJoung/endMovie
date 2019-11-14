@@ -5,21 +5,35 @@
         <v-col cols="12" sm="12" xs="12" class="text-center display-1">End Movie</v-col>
         <v-col cols="12" lg="5" sm="7" xs="10" class="mx-auto">
           <v-flex class="font-weight-bold ml-1">아이디</v-flex>
-          <v-text-field
-            v-model="username"
-            type="text"
-            label="아이디"
-            :rules="[rules.isNull('아이디')]"
-            solo
-            required
-            @keyup.enter="joinValidate"
-          ></v-text-field>
+          <v-row>
+            <v-col cols="8">
+              <v-text-field
+                v-model="username"
+                type="text"
+                label="아이디"
+                :rules="[rules.isNull('아이디')]"
+                solo
+                required
+                @keyup.enter="checkUsername"
+                @blur="checkUsername"
+              ></v-text-field>
+            </v-col>
+            <v-col cols="4">
+              <v-btn
+                large
+                tile
+                class="w-100"
+                :color="isCheckUsername ? 'success' : 'dark'"
+                @click="checkUsername"
+              >{{ checkUsernameMessage }}</v-btn>
+            </v-col>
+          </v-row>
           <v-flex class="font-weight-bold ml-1">비밀번호</v-flex>
           <v-text-field
             v-model="password"
             type="password"
             label="비밀번호"
-            :rules="[rules.isNull('비밀번호')]"
+            :rules="[rules.password, rules.minLength(8), rules.maxLength(20)]"
             solo
             required
             autocomplete="on"
@@ -30,12 +44,16 @@
             v-model="passwordConfirm"
             type="password"
             label="비밀번호 재확인"
-            :rules="[rules.isNull('비밀번호')]"
+            :rules="[rules.password, rules.minLength(8), rules.maxLength(20)]"
             solo
             required
             autocomplete="on"
             @keyup.enter="joinValidate"
           ></v-text-field>
+          <v-flex class="text-center mb-7" v-if="password.length >= 8 && passwordConfirm.length >= 8">
+            <small class="success--text" v-if="password === passwordConfirm">비밀번호가 일치합니다.</small>
+            <small class="error--text" v-else>비밀번호가 일치하지 않습니다.</small>
+          </v-flex>
           <v-flex class="ml-1">
             <span class="font-weight-bold">본인 확인 이메일</span>
           </v-flex>
@@ -90,7 +108,7 @@
 </template>
 
 <script>
-import { emailCheck, joinUser } from "../api/user.js";
+import { emailCheck, joinUser, idCheck } from "../api/user.js";
 
 export default {
   data() {
@@ -100,6 +118,8 @@ export default {
       password: "",
       passwordConfirm: "",
       email: "",
+      isCheckUsername: false,
+      checkUsernameMessage: '중복확인',
       checkedEmail: "",
       isCheckEmail: false,
       isLoading: false,
@@ -109,25 +129,35 @@ export default {
       isStop: false,
       rules: {
         isNull: str => v => (v || "").length > 0 || `${str}를 입력해주세요.`,
-        email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.'
+        email: (v) => /.+@.+\..+/.test(v) || '유효한 E-mail을 입력해 주세요.',
+        password: (v) =>
+          /^(?=.*[a-z])(?=.*\d)(?=.*(_|[^\w])).+$/.test(v || '') ||
+          '비밀번호는 영문, 숫자, 특수문자를 포함하여야 합니다.',
+        minLength: (len) => (v) =>
+          (v || '').length >= len || `해당 내용은 ${len}자를 넘어야 합니다.`,
+        maxLength: (len) => (v) =>
+          (v || '').length <= len || `해당 내용은 ${len}자를 넘을 수 없습니다.`
       }
     };
   },
   methods: {
     joinValidate() {
       if (this.$refs.loginForm.validate()) {
-        if (this.isCheckEmail) {
-          const joinData = { username: this.username, password: this.password, email: this.checkedEmail }
-          joinUser(joinData)
-            .then(({data}) => {
-              console.log(data)
-              this.$router.push("/")
-            })
-            .catch(error => {
-              console.error(error)
-            })
+        if (this.isCheckUsername && (this.password === this.passwordConfirm)) {
+          if (this.isCheckEmail) {
+            const joinData = { username: this.username, password: this.password, email: this.checkedEmail }
+            joinUser(joinData)
+              .then(({data}) => {
+                this.$router.push("/")
+              })
+              .catch(error => {
+                console.error(error)
+              })
+          } else {
+            alert('이메일 인증이 필요합니다.')
+          }
         } else {
-          alert('이메일 인증이 필요합니다.')
+          alert('아이디가 중복되거나, \n 비밀번호가 일치하지 않습니다.')
         }
       }
     },
@@ -156,6 +186,23 @@ export default {
         alert('인증이 완료되었습니다.')
       } else {
         this.notMeching = true
+      }
+    },
+    checkUsername() {
+      if(this.username) {
+        const username = { username: this.username }
+        idCheck(username)
+          .then(({data}) => {
+            this.isCheckUsername = !(data.result)
+            if(data.result) {
+              this.checkUsernameMessage = '사용불가'
+            } else {
+              this.checkUsernameMessage = '사용가능'
+            }
+          })
+      } else {
+        this.checkUsernameMessage = '중복확인'
+        this.isCheckUsername = false
       }
     }
   }

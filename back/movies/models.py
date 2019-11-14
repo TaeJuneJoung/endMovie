@@ -20,6 +20,8 @@ class Comment(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.CharField(max_length=300)
+    goods = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='comment_goods', blank=True)
+    report = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='comment_report', blank=True)
     update_at = models.DateTimeField(auto_now=True)
     is_update = models.IntegerField(default=0)
 

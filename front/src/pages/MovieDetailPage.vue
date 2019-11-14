@@ -3,7 +3,7 @@
     <v-row class="mx-3 mt-5">
       <v-col cols="12">
         <span class="display-2">
-          <strong>{{fetchedMovie.title}}</strong>
+          <strong>{{ fetchedMovie.title }}</strong>
           <small class="open-date">| {{fetchedMovie.open_date}}</small>
         </span>
       </v-col>
@@ -35,14 +35,22 @@
           {{ fetchedMovie.content }}
         </v-col>
       </v-row>
+      <comment class="mt-5" :movieId="fetchedMovie.id"></comment>
+			<comment-list class="mt-3" :movieId="fetchedMovie.id"></comment-list>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import CommentList from '../components/CommentList.vue'
+import Comment from '../components/Comment.vue'
+import { mapGetters } from "vuex"
 
 export default {
+	components: {
+    CommentList,
+    Comment,
+	},
   data() {
     return {
       movieId: this.$route.params.id

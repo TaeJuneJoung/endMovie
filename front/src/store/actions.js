@@ -1,5 +1,6 @@
 import { fetchMovieList, fetchMovieScore, fetchMovie } from '../api/index.js'
 import { loginUser } from '../api/user.js'
+import { fetchMovieComment } from '../api/comment.js'
 
 export default {
 	login({commit}, user) {
@@ -49,6 +50,15 @@ export default {
 		fetchMovie(movieId)
 			.then(({data}) => {
 				commit('setMovie', data)
+			})
+			.catch(error => {
+				console.error(error)
+			})
+	},
+	FetchMovieComment({commit}, movieId) {
+		fetchMovieComment(movieId)
+			.then(({data}) => {
+				commit('setComments', data)
 			})
 			.catch(error => {
 				console.error(error)

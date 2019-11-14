@@ -56,6 +56,7 @@ export default {
          */
         putMovieScore(movieScoreId, this.fetchedUser.id, movieId, this.rating)
           .then(({data}) => {
+            this.$store.dispatch('FetchMovies', this.fetchedUser.username)
           })
           .catch(error => {
             console.error(error)
@@ -66,6 +67,7 @@ export default {
          */
         postMovieScore(this.fetchedUser.id, movieId, this.rating)
           .then(response => {
+            this.$store.dispatch('FetchMovies', this.fetchedUser.username)
           })
           .catch(error => {
             console.error(error)
@@ -75,6 +77,7 @@ export default {
     detail(movieId) {
       this.$store.dispatch('FetchMovie', movieId)
         .then(() => {
+          this.$store.dispatch('FetchMovieComment', movieId)
           this.$router.push(`/movies/${movieId}`)
         })
     }

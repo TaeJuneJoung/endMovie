@@ -32,13 +32,26 @@ def movie(request, movie_pk):
     serializer = MovieSerializer(movie, many=False)
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def comments(request, movie_pk):
-    comments = Comment.objects.filter(movie=movie_pk).all()
-    serializer = CommentSerializer(comments, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        comments = Comment.objects.filter(movie=movie_pk).all()
+        for i in range(len(comments)):
+            comments[i].update_at = comments[i].update_at.strftime("%Y.%m.%d %H:%M")
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    else:
+        user_pk = request.data.get('user')
+        user = get_object_or_404(get_user_model(), pk=user_pk)
+        movie = get_object_or_404(Movie, pk=movie_pk)
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            Comment.objects.create(user=user, movie=movie, content=request.data.get('content'))
+            return Response({'message': True})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def comment(request, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     if request.method == 'GET':
@@ -51,6 +64,14 @@ def comment(request, comment_pk):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PATCH':
+        user_pk = request.data.get('userId')
+        user =  get_object_or_404(get_user_model(), pk=user_pk)
+        if user in comment.goods.all():
+            comment.goods.remove(user)
+        else:
+            comment.goods.add(user)
+        return Response({'message':'수정되었습니다.'})
     else:
         comment.delete()
         return Response({'message':'삭제되었습니다.'})
